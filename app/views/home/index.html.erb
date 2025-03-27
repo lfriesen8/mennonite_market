@@ -1,4 +1,4 @@
-<h1>Welcome to Mennonite Market</h1>
+<h1>Welcome to Mennonite Market!</h1>
 
 <%= form_tag(root_path, method: :get) do %>
   <%= check_box_tag :sale, "true", params[:sale] == "true" %> On Sale
@@ -7,19 +7,22 @@
   <%= submit_tag "Filter" %>
 <% end %>
 
-<div class="product-list">
-  <% @products.each do |product| %>
-    <div class="product-item">
-      <%= link_to product_path(product) do %>
-        <%= image_tag url_for(product.image), size: "200x200" if product.image.attached? %>
-        <h3><%= product.name %></h3>
-        <p><%= product.description %></p>
-        <p><%= number_to_currency(product.price) %></p>
-      <% end %>
-    </div>
-  <% end %>
-</div>
+<% if @products.any? %>
+  <div class="product-list">
+    <% @products.each do |product| %>
+      <div class="product-item">
+        <%= link_to product_path(product) do %>
+          <h3><%= product.name %></h3>
+          <p><%= product.description %></p>
+          <p><%= number_to_currency(product.price) %></p>
+          <%= image_tag url_for(product.image), size: "200x200" if product.image.attached? %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p>No products found.</p>
+<% end %>
 
 <!-- Pagination Links -->
 <%= paginate @products %>
-

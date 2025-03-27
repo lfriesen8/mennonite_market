@@ -1,5 +1,5 @@
 ActiveAdmin.register Product do
-  permit_params :name, :description, :price, :stock_quantity, :category_id, :image
+  permit_params :name, :description, :price, :stock_quantity, :sale, :category_id, :image
 
   # Explicitly set the filters (removing image from the filters)
   filter :name
@@ -34,6 +34,7 @@ ActiveAdmin.register Product do
       f.input :stock_quantity
       f.input :category
       f.input :image, as: :file
+      f.input :sale, as: :check_boxes, collection: [true, false]
     end
     f.actions
   end
