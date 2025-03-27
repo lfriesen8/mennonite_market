@@ -340,9 +340,6 @@ GEM
     turbo-rails (2.0.13)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
-    turbolinks (5.2.1)
-      turbolinks-source (~> 5.2)
-    turbolinks-source (5.2.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (3.1.4)
@@ -383,6 +380,7 @@ DEPENDENCIES
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
+  kaminari
   nokogiri (~> 1.15.7)
   puma (>= 5.0)
   rails (~> 7.2.2, >= 7.2.2.1)
@@ -393,7 +391,6 @@ DEPENDENCIES
   sqlite3 (~> 1.4.2)
   stimulus-rails
   turbo-rails
-  turbolinks (~> 5)
   tzinfo-data
   web-console
 
