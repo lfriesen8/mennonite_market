@@ -1,21 +1,23 @@
 class HomeController < ApplicationController
   def index
+    @categories = Category.all  # Fetch all categories
     @products = Product.all
 
-    if params[:sale]
-      @products = @products.where(sale: true)
+    # Filter by sale
+    @products = @products.where(sale: true) if params[:sale]
+
+    # Filter by new arrivals (created in the last 3 days)
+    @products = @products.where('created_at > ?', 3.days.ago) if params[:new]
+
+    # Filter by recently updated (updated in the last 3 days)
+    @products = @products.where('updated_at > ?', 3.days.ago) if params[:updated]
+
+    # Filter by category if passed
+    if params[:category_id]
+      @products = @products.where(category_id: params[:category_id])
     end
 
-    if params[:new]
-      @products = @products.where('created_at > ?', 3.days.ago)
-    end
-
-    if params[:updated]
-      @products = @products.where('updated_at > ?', 3.days.ago)
-    end
-
-    # Add pagination
-    @products = @products.page(params[:page]).per(10)  # Here, 10 is the number of products per page
+    # Pagination
+    @products = @products.page(params[:page]).per(10)
   end
 end
-

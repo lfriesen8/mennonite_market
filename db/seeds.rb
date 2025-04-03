@@ -43,16 +43,19 @@ Product.create([
 100.times do
   category = categories.sample  # Select a random category
 
+  product_name = Faker::Food.dish  # Random food dish names
+
+  # Check if the product already exists to avoid duplicates
+  next if Product.exists?(name: product_name)  # Skip if product already exists
+
   # Create the product with Faker-generated data
   Product.create!(
-    name: Faker::Food.dish,  # Random food dish names
+    name: product_name,
     description: Faker::Food.description,  # Random descriptions
     price: Faker::Commerce.price(range: 5..50.0),  # Random price between $5 and $50
     stock_quantity: Faker::Number.between(from: 10, to: 100),  # Random stock quantity between 10 and 100
     category: category,  # Assign random category from the existing ones
-    image: nil  # Remove image for now
+    image: nil  # Remove image for now (you can later assign an actual image file if needed)
   )
 end
-
-
   

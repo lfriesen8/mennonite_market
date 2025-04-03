@@ -1,28 +1,64 @@
-<h1>Welcome to Mennonite Market!</h1>
+<h1 class="text-center mb-4">Welcome to Mennonite Market!</h1>
 
-<%= form_tag(root_path, method: :get) do %>
-  <%= check_box_tag :sale, "true", params[:sale] == "true" %> On Sale
-  <%= check_box_tag :new, "true", params[:new] == "true" %> New Arrivals
-  <%= check_box_tag :updated, "true", params[:updated] == "true" %> Recently Updated
-  <%= submit_tag "Filter" %>
+<!-- Category Navigation - Dropdown -->
+<div class="text-center mb-4">
+  <%= link_to 'All Products', root_path, class: "btn btn-secondary mx-2" %>
+
+  <!-- Dropdown for Categories -->
+  <div class="dropdown d-inline-block">
+    <button class="btn btn-info dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+      Categories
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+      <% @categories.each do |category| %>
+        <li>
+          <%= link_to category.name, root_path(category_id: category.id), class: "dropdown-item" %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+
+<!-- Filter Form -->
+<%= form_tag(root_path, method: :get, class: "mb-4") do %>
+  <div class="d-flex justify-content-center">
+    <div class="form-check mx-2">
+      <%= check_box_tag :sale, "true", params[:sale] == "true", class: "form-check-input" %>
+      <label class="form-check-label" for="sale">On Sale</label>
+    </div>
+    <div class="form-check mx-2">
+      <%= check_box_tag :new, "true", params[:new] == "true", class: "form-check-input" %>
+      <label class="form-check-label" for="new">New Arrivals</label>
+    </div>
+    <div class="form-check mx-2">
+      <%= check_box_tag :updated, "true", params[:updated] == "true", class: "form-check-input" %>
+      <label class="form-check-label" for="updated">Recently Updated</label>
+    </div>
+    <%= submit_tag "Filter", class: "btn btn-primary" %>
+  </div>
 <% end %>
 
+<!-- Display Products -->
 <% if @products.any? %>
-  <div class="product-list">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
     <% @products.each do |product| %>
-      <div class="product-item">
-        <%= link_to product_path(product) do %>
-          <h3><%= product.name %></h3>
-          <p><%= product.description %></p>
-          <p><%= number_to_currency(product.price) %></p>
-          <%= image_tag url_for(product.image), size: "200x200" if product.image.attached? %>
-        <% end %>
+      <div class="col">
+        <div class="card h-100">
+          <%= link_to product_path(product) do %>
+            <%= image_tag url_for(product.image), class: "card-img-top", alt: product.name, size: "200x200" if product.image.attached? %>
+            <div class="card-body">
+              <h5 class="card-title"><%= product.name %></h5>
+              <p class="card-text"><%= product.description %></p>
+              <p class="card-text text-muted"><%= number_to_currency(product.price) %></p>
+            </div>
+          <% end %>
+        </div>
       </div>
     <% end %>
   </div>
 <% else %>
-  <p>No products found.</p>
+  <p class="text-center mt-4">No products found.</p>
 <% end %>
 
 <!-- Pagination Links -->
-<%= paginate @products %>
+<%= paginate @products, class: "d-flex justify-content-center mt-4" %>
