@@ -1,5 +1,5 @@
 ActiveAdmin.register Product do
-  permit_params :name, :description, :price, :stock_quantity, :sale, :category_id, :image
+  permit_params :name, :description, :price, :stock_quantity, :sale, :category_id, :image, :sale
 
   # Explicitly set the filters (removing image from the filters)
   filter :name
@@ -23,6 +23,7 @@ ActiveAdmin.register Product do
       end
     end
     actions
+    column :sale  # Add a column to display whether the product is on sale
   end
 
   # Form view for creating/updating products
@@ -34,9 +35,8 @@ ActiveAdmin.register Product do
       f.input :stock_quantity
       f.input :category
       f.input :image, as: :file
-      f.input :sale, as: :check_boxes, collection: [true, false]
+      f.input :sale, as: :radio, collection: { "On Sale" => true, "Not On Sale" => false }
     end
     f.actions
   end
 end
-

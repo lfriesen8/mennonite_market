@@ -1,0 +1,35 @@
+<h1>Your Cart</h1>
+
+<% if @cart_products.empty? %>
+  <p>Your cart is empty.</p>
+<% else %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Product Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Remove</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cart_products.each do |item| %>
+        <tr>
+        <td><%= item[:product].name %></td>
+        <td><%= number_to_currency(item[:product].price) %></td>
+        
+          <td>
+            <%= item[:quantity] %> <!-- Show the quantity added to the cart -->
+          </td>
+          <td>
+          <%= button_to 'Remove', remove_from_cart_path(product_id: item[:product].id), method: :delete, class: 'btn btn-danger' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  
+  <!-- Change this link to view_cart_path for now -->
+  <%= link_to 'Proceed to Checkout', view_cart_path, class: 'btn btn-success' %> <!-- Placeholder for future checkout -->
+<% end %>
+

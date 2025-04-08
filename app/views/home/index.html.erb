@@ -30,10 +30,6 @@
       <%= check_box_tag :new, "true", params[:new] == "true", class: "form-check-input" %>
       <label class="form-check-label" for="new">New Arrivals</label>
     </div>
-    <div class="form-check mx-2">
-      <%= check_box_tag :updated, "true", params[:updated] == "true", class: "form-check-input" %>
-      <label class="form-check-label" for="updated">Recently Updated</label>
-    </div>
     <%= submit_tag "Filter", class: "btn btn-primary" %>
   </div>
 <% end %>
@@ -50,6 +46,13 @@
               <h5 class="card-title"><%= product.name %></h5>
               <p class="card-text"><%= product.description %></p>
               <p class="card-text text-muted"><%= number_to_currency(product.price) %></p>
+
+              <!-- Add to Cart Form -->
+<%= form_tag add_to_cart_path, method: :post, class: 'd-flex' do %>
+  <%= hidden_field_tag :product_id, product.id %>
+  <%= number_field_tag :quantity, 1, min: 1, max: product.stock_quantity, class: 'form-control me-2' %>
+  <%= submit_tag 'Add to Cart', class: 'btn btn-primary mt-2' %>
+<% end %>
             </div>
           <% end %>
         </div>

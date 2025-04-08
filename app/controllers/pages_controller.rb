@@ -1,8 +1,10 @@
 class PagesController < ApplicationController
   def show
     @page = Page.find_by(slug: params[:slug])
+
+    # Handle page not found
     if @page
-      render layout: false # Remove layout to test if the content appears without it
+      render layout: 'application' # Ensure the default layout is used
     else
       render file: "#{Rails.root}/public/404.html", status: :not_found
     end
