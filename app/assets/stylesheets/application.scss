@@ -1,13 +1,46 @@
-// Import Bootstrap (make sure the path is correct)
 @import "bootstrap";
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap');
 
-// Your custom styles go here
+// SCSS Variables
+$flash-color: #f8f9fa; // Light flash
+$logo-font: 'UnifrakturCook', cursive;
+$base-bg: #d9d7b6 !important;
+
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #d9d7b6;
+  background-color: $base-bg;
+}
+
+// Custom styling for the logo using the custom class
+// Targeting .navbar-brand.custom-logo to ensure our rules win
+.navbar-brand.custom-logo {
+  font-family: $logo-font;
+  font-size: 1.5rem;
+  color: white !important; // Force logo text to be white
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: lighten($flash-color, 10%);
+    border-radius: 5px;
+    padding: 0 5px;
+    // Optionally add a subtle glow:
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+  }
 }
 
 // Additional custom styling for other elements
 h1 {
-  color: #6b7b8c;
+  color: #c9e3ff;
+}
+body {
+  background-color: hotpink !important;
+}
+
+.custom-cart-btn {
+  background-color: white;
+  color: black;
+
+  &:hover {
+    background-color: #eee;
+  }
 }

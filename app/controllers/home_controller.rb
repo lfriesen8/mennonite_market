@@ -79,6 +79,20 @@ class HomeController < ApplicationController
       session[:cart][product_id] = quantity
     end
 
+    def update_cart
+      product_id = params[:product_id].to_s
+      new_quantity = params[:quantity].to_i
+    
+      if session[:cart]&.key?(product_id)
+        session[:cart][product_id] = new_quantity
+        flash[:notice] = "Quantity updated."
+      else
+        flash[:alert] = "Product not found in cart."
+      end
+    
+      redirect_to view_cart_path
+    end
+    
     # Reduce stock in the database
     product.update(stock_quantity: product.stock_quantity - quantity)
 

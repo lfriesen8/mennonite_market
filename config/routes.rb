@@ -8,12 +8,18 @@ Rails.application.routes.draw do
   # These are the specific routes for about and contact
   get '/about', to: 'pages#show', slug: 'about', as: :about
   get '/contact', to: 'pages#show', slug: 'contact', as: :contact
+  #route for new orders
+  resources :orders, only: [:new, :create, :show]
+
+
 
   # Route for adding products to the cart
   post 'add_to_cart', to: 'home#add_to_cart', as: :add_to_cart
 
   # Define the route for viewing the cart
   get 'cart', to: 'home#view_cart', as: :view_cart
+
+  patch "update_cart", to: "home#update_cart", as: "update_cart"
 
   delete 'remove_from_cart', to: 'home#remove_from_cart', as: :remove_from_cart
 
