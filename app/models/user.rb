@@ -1,9 +1,9 @@
 class User < ApplicationRecord
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
+         
   has_many :orders
 
-
-
-  # If you're using roles (like admin)
   def admin?
     role == 'admin'
   end
