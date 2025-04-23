@@ -105,12 +105,12 @@ class HomeController < ApplicationController
 
     # Reduce quantity or remove completely
     if session[:cart]&.key?(product_id)
-      session[:cart][product_id] -= 1
-      session[:cart].delete(product_id) if session[:cart][product_id] <= 0
+      session[:cart].delete(product_id)
       flash[:notice] = "Item removed from cart."
     else
       flash[:alert] = "Item not found in cart."
     end
+    
 
     redirect_to view_cart_path
   end

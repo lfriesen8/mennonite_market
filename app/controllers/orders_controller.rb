@@ -1,4 +1,5 @@
 class OrdersController < ApplicationController
+  require 'stripe'
   before_action :authenticate_user!, only: [:history]
 
   def new
@@ -17,41 +18,59 @@ class OrdersController < ApplicationController
     end
 
     if customer&.save
-      order = Order.new(customer_id: customer.id, total_price: 0)
+      order = Order.create(customer_id: customer.id, total_price: 0)
+      total_price = 0
+      line_items = []
 
-      if order.save
-        total_price = 0
+      cart.each do |product_id, quantity|
+        product = Product.find_by(id: product_id)
+        next unless product
 
-        cart.each do |product_id, quantity|
-          product = Product.find_by(id: product_id)
-          next unless product
+        subtotal = product.price * quantity.to_i
+        total_price += subtotal
 
-          subtotal = product.price * quantity.to_i
-          total_price += subtotal
-
-          order.order_items.create(
-            product_id: product.id,
-            quantity: quantity,
-            price: product.price
-          )
-        end
-
-        taxes = calculate_taxes(total_price, province)
-
-        order.update(
-          total_price: total_price + taxes.values.sum,
-          gst: taxes[:gst],
-          pst: taxes[:pst],
-          hst: taxes[:hst]
+        order.order_items.create!(
+          product_id: product.id,
+          quantity: quantity,
+          price: product.price
         )
 
-        session[:cart] = {}
-        flash[:notice] = "Order placed successfully!"
-        redirect_to order_path(order)
-      else
-        flash[:alert] = "Could not create order."
-        redirect_to new_order_path
+        line_items << {
+          price_data: {
+            currency: 'cad',
+            product_data: {
+              name: product.name
+            },
+            unit_amount: (product.price * 100).to_i
+          },
+          quantity: quantity.to_i
+        }
       end
+
+      taxes = calculate_taxes(total_price, province)
+
+      order.update!(
+        total_price: total_price + taxes.values.sum,
+        gst: taxes[:gst],
+        pst: taxes[:pst],
+        hst: taxes[:hst]
+      )
+
+      session[:cart] = {}
+
+      Stripe.api_key = Rails.application.credentials.dig(:stripe, :secret_key)
+
+
+      # Create Stripe Checkout session
+      session = Stripe::Checkout::Session.create(
+        payment_method_types: ['card'],
+        line_items: line_items,
+        mode: 'payment',
+        success_url: order_url(order),
+        cancel_url: root_url
+      )
+
+      redirect_to session.url, allow_other_host: true
     else
       flash[:alert] = "Invalid customer details."
       redirect_to new_order_path
@@ -95,4 +114,3 @@ class OrdersController < ApplicationController
     }
   end
 end
-

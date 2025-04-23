@@ -45,3 +45,36 @@ body {
     background-color: #eee;
   }
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 0.5rem;
+
+  .page-item {
+    font-size: 1.1rem;
+
+    &.active .page-link {
+      background-color: #0d6efd;
+      color: #fff;
+      border-color: #0d6efd;
+      box-shadow: 0 4px 10px rgba(13, 110, 253, 0.2);
+    }
+
+    .page-link {
+      border-radius: 0.5rem;
+      padding: 0.6rem 1rem;
+      color: #0d6efd;
+      border: 1px solid #dee2e6;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: #e6f0ff;
+        color: #0d6efd;
+        text-decoration: none;
+      }
+    }
+  }
+}
+

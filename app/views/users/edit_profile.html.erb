@@ -1,0 +1,20 @@
+<h2>Edit Profile</h2>
+
+<%= form_with model: @user, url: profile_path, method: :patch, local: true do |f| %>
+  <div class="mb-3">
+    <%= f.label :username %>
+    <%= f.text_field :username, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :address %>
+    <%= f.text_field :address, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :province_id, "Province" %>
+    <%= f.collection_select :province_id, Province.all, :id, :name, prompt: "Select Province", class: "form-select" %>
+  </div>
+
+  <%= f.submit "Update", class: "btn btn-primary" %>
+<% end %>

@@ -27,7 +27,7 @@ gem 'faker', '~> 3.4', '>= 3.4.2'
 gem 'kaminari'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ mswin mswin64 mingw x64_mingw jruby ]
-
+gem 'stripe'
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
@@ -43,6 +43,9 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+end
+  group :development, :test do
+  gem 'dotenv-rails'
 end
 
 group :development do
