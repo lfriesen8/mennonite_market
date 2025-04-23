@@ -3,23 +3,24 @@
 <%= form_with url: orders_path, method: :post, local: true do |f| %>
   <div class="mb-3">
     <%= label_tag :name, "Full Name" %>
-    <%= text_field_tag :name, nil, class: "form-control", required: true %>
+    <%= text_field_tag :name, current_user&.username, class: "form-control", required: true %>
   </div>
 
   <div class="mb-3">
     <%= label_tag :email, "Email" %>
-    <%= email_field_tag :email, nil, class: "form-control", required: true %>
+    <%= email_field_tag :email, current_user&.email, class: "form-control", required: true %>
   </div>
 
   <div class="mb-3">
     <%= label_tag :address, "Address" %>
-    <%= text_field_tag :address, nil, class: "form-control", required: true %>
+    <%= text_field_tag :address, current_user&.address, class: "form-control", required: true %>
   </div>
 
   <div class="mb-3">
-    <%= label_tag :province, "Province" %>
-    <%= select_tag :province, options_for_select(["MB", "ON", "BC", "AB", "QC", "SK", "NS", "NB", "NL", "PE", "NT", "YT", "NU"]), prompt: "Select Province", class: "form-select", required: true %>
+    <%= label_tag :province_id, "Province" %>
+    <%= select_tag :province_id, options_from_collection_for_select(Province.all, :id, :name, current_user&.province_id), prompt: "Select Province", class: "form-select", required: true %>
   </div>
 
   <%= submit_tag "Place Order", class: "btn btn-success" %>
 <% end %>
+

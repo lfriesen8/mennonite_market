@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get '/contact', to: 'pages#show', slug: 'contact', as: :contact
   #route for new orders
   resources :orders, only: [:new, :create, :show]
+  get '/my_orders', to: 'orders#history', as: :order_history
 
 
 

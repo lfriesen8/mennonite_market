@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap');
 
 // SCSS Variables
-$flash-color: #f8f9fa; // Light flash
+$flash-color: #f8f9fac5; // Light flash
 $logo-font: 'UnifrakturCook', cursive;
 $base-bg: #d9d7b6 !important;
 
@@ -16,15 +16,15 @@ body {
 .navbar-brand.custom-logo {
   font-family: $logo-font;
   font-size: 1.5rem;
-  color: white !important; // Force logo text to be white
+  color: rgba(236, 236, 236, 0.907) !important; // Force logo text to be white
   transition: background-color 0.3s ease-in-out;
 
   &:hover {
-    background-color: lighten($flash-color, 10%);
-    border-radius: 5px;
+    background-color: lighten($flash-color, 2%);
+    border-radius: 2px;
     padding: 0 5px;
     // Optionally add a subtle glow:
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+    text-shadow: 0 0 5px rgba(213, 213, 213, 0.6);
   }
 }
 
@@ -33,7 +33,8 @@ h1 {
   color: #c9e3ff;
 }
 body {
-  background-color: hotpink !important;
+  background: linear-gradient(135deg, #e4e9ec, #cbd5d6, #a8b7b8);
+  min-height: 100vh;
 }
 
 .custom-cart-btn {

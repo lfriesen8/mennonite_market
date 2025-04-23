@@ -1,4 +1,7 @@
 <h1 class="text-center mb-4">Welcome to Mennonite Market!</h1>
+<% if user_signed_in? %>
+  <h4 class="text-muted text-center mt-2">Vo Scheent et, <%= current_user.username %>?</h4>
+<% end %>
 
 <!-- Unified Search + Category Filter -->
 <%= form_tag(root_path, method: :get, class: "mb-4") do %>
