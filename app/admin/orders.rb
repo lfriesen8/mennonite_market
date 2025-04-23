@@ -1,6 +1,6 @@
 ActiveAdmin.register Order do
-  # Permit necessary parameters
-  permit_params :customer_id, :total_price, :gst, :pst, :hst
+  # Permit necessary parameters including status
+  permit_params :customer_id, :total_price, :gst, :pst, :hst, :status
 
   # Preload associations for performance
   includes :customer, order_items: :product
@@ -28,6 +28,7 @@ ActiveAdmin.register Order do
       end.join(", ").html_safe
     end
 
+    column :status
     column :gst
     column :pst
     column :hst
@@ -38,6 +39,7 @@ ActiveAdmin.register Order do
   end
 
   # Filters for searching
+  filter :status, as: :select, collection: Order::STATUSES
   filter :customer_email, as: :string
   filter :total_price
   filter :created_at
@@ -49,6 +51,7 @@ ActiveAdmin.register Order do
       row("Customer") { |order| order.customer.email }
       row("Address") { order.customer.address }
       row("Province") { order.customer.province.name rescue "N/A" }
+      row :status
       row :gst
       row :pst
       row :hst
@@ -66,5 +69,16 @@ ActiveAdmin.register Order do
       end
     end
   end
-end
 
+  # Form for editing order status
+  form do |f|
+    f.inputs do
+      f.input :status, as: :select, collection: Order::STATUSES, include_blank: false
+      f.input :gst
+      f.input :pst
+      f.input :hst
+      f.input :total_price
+    end
+    f.actions
+  end
+end
