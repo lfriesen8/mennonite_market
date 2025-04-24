@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:add_to_cart] # ← TEMP TEST ONLY
+
   def index
     @categories = Category.all
     @products = Product.all
@@ -50,21 +52,6 @@ class HomeController < ApplicationController
     @total_price = calculate_total_price(@cart_products)
   end
 
-  # Helper method to total up prices
-  def calculate_total_price(cart_items)
-    cart_items.sum do |item|
-      product = item[:product]
-      quantity = item[:quantity].to_i
-
-      if product.present? && product.price.present?
-        product.price * quantity
-      else
-        Rails.logger.warn "Skipping item due to missing product or price."
-        0
-      end
-    end
-  end
-
   def add_to_cart
     product_id = params[:product_id].to_s
     quantity = params[:quantity].to_i
@@ -79,20 +66,6 @@ class HomeController < ApplicationController
       session[:cart][product_id] = quantity
     end
 
-    def update_cart
-      product_id = params[:product_id].to_s
-      new_quantity = params[:quantity].to_i
-    
-      if session[:cart]&.key?(product_id)
-        session[:cart][product_id] = new_quantity
-        flash[:notice] = "Quantity updated."
-      else
-        flash[:alert] = "Product not found in cart."
-      end
-    
-      redirect_to view_cart_path
-    end
-    
     # Reduce stock in the database
     product.update(stock_quantity: product.stock_quantity - quantity)
 
@@ -100,20 +73,49 @@ class HomeController < ApplicationController
     redirect_to root_path
   end
 
+  def update_cart
+    product_id = params[:product_id].to_s
+    new_quantity = params[:quantity].to_i
+
+    if session[:cart]&.key?(product_id)
+      session[:cart][product_id] = new_quantity
+      flash[:notice] = "Quantity updated."
+    else
+      flash[:alert] = "Product not found in cart."
+    end
+
+    redirect_to view_cart_path
+  end
+
   def remove_from_cart
     product_id = params[:product_id].to_s
 
-    # Reduce quantity or remove completely
     if session[:cart]&.key?(product_id)
       session[:cart].delete(product_id)
       flash[:notice] = "Item removed from cart."
     else
       flash[:alert] = "Item not found in cart."
     end
-    
 
     redirect_to view_cart_path
   end
+
+  private
+
+  def calculate_total_price(cart_items)
+    cart_items.sum do |item|
+      product = item[:product]
+      quantity = item[:quantity].to_i
+
+      if product.present? && product.price.present?
+        product.price * quantity
+      else
+        Rails.logger.warn "Skipping item due to missing product or price."
+        0
+      end
+    end
+  end
 end
+
 
 

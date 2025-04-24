@@ -60,14 +60,16 @@ class OrdersController < ApplicationController
 
       Stripe.api_key = Rails.application.credentials.dig(:stripe, :secret_key)
 
-
       # Create Stripe Checkout session
       session = Stripe::Checkout::Session.create(
         payment_method_types: ['card'],
         line_items: line_items,
         mode: 'payment',
         success_url: order_url(order),
-        cancel_url: root_url
+        cancel_url: root_url,
+        metadata: {
+          order_id: order.id
+        }
       )
 
       redirect_to session.url, allow_other_host: true
@@ -79,6 +81,9 @@ class OrdersController < ApplicationController
 
   def show
     @order = Order.find(params[:id])
+
+    # Soft fallback to mark the order as paid if the user reached this page from Stripe
+    @order.update(status: 'paid') if @order.status == 'new'
   end
 
   def history

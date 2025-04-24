@@ -1,5 +1,5 @@
 ActiveAdmin.register Order do
-  # Permit necessary parameters including status
+  # Permit necessary parameters including customer and status
   permit_params :customer_id, :total_price, :gst, :pst, :hst, :status
 
   # Preload associations for performance
@@ -11,15 +11,15 @@ ActiveAdmin.register Order do
     id_column
 
     column "Customer", sortable: 'customer_id' do |order|
-      order.customer.email
+      order.customer&.email
     end
 
     column "Address" do |order|
-      order.customer.address
+      order.customer&.address
     end
 
     column "Province" do |order|
-      order.customer.province.name rescue "N/A"
+      order.customer&.province&.name || "N/A"
     end
 
     column "Products Ordered" do |order|
@@ -48,9 +48,9 @@ ActiveAdmin.register Order do
   show do
     attributes_table do
       row :id
-      row("Customer") { |order| order.customer.email }
-      row("Address") { order.customer.address }
-      row("Province") { order.customer.province.name rescue "N/A" }
+      row("Customer") { |order| order.customer&.email }
+      row("Address") { order.customer&.address }
+      row("Province") { order.customer&.province&.name || "N/A" }
       row :status
       row :gst
       row :pst
@@ -70,9 +70,10 @@ ActiveAdmin.register Order do
     end
   end
 
-  # Form for editing order status
+  # Form for creating or editing orders
   form do |f|
     f.inputs do
+      f.input :customer, collection: Customer.all.map { |c| [c.email, c.id] }, include_blank: false
       f.input :status, as: :select, collection: Order::STATUSES, include_blank: false
       f.input :gst
       f.input :pst
@@ -82,3 +83,7 @@ ActiveAdmin.register Order do
     f.actions
   end
 end
+
+
+
+

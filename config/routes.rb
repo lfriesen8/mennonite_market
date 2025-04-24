@@ -38,6 +38,8 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     registrations: 'users/registrations'
   }
+  
+  post '/webhooks/stripe', to: 'stripe_webhooks#receive'
 
   # Health check and PWA
   get 'up' => 'rails/health#show', as: :rails_health_check
