@@ -77,4 +77,31 @@ body {
     }
   }
 }
+.product-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: white;
+}
+
+.product-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes fadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-header {
+  animation: fadeSlideDown 0.8s ease-out forwards;
+}
+
 
