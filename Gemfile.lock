@@ -135,7 +135,7 @@ GEM
     error_highlight (0.7.0)
     erubi (1.13.1)
     execjs (2.10.0)
-    faker (3.5.1)
+    faker (3.5.2)
       i18n (>= 1.8.11, < 2)
     ffi (1.17.1)
     formtastic (5.0.0)
@@ -398,7 +398,7 @@ DEPENDENCIES
   devise (~> 4.9)
   dotenv-rails
   error_highlight (>= 0.4.0)
-  faker (~> 3.4, >= 3.4.2)
+  faker (~> 3.5)
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
